@@ -8,11 +8,10 @@ export type VerificationState =
   | 'initial' 
   | 'email-form'
   | 'submitting' 
-  | 'pending-verification'
+  | 'application-received'
   | 'success' 
   | 'sold-out' 
-  | 'already-applied'
-  | 'verification-expired';
+  | 'already-applied';
 
 interface EmailVerificationProps {
   state: VerificationState;
@@ -38,20 +37,23 @@ export function EmailVerification({ state, onApply }: EmailVerificationProps) {
   };
 
   const renderInitialState = () => (
-    <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center space-x-4">
+    <div className="space-y-8">
+      <div className="text-center space-y-6">
+        <div className="flex items-center justify-center">
           <img 
             src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
             alt="terning character" 
-            className="h-20 w-20"
+            className="h-24 w-24"
           />
         </div>
+        <p className="text-muted-foreground text-lg">
+          마지막 선물을 준비했어요
+        </p>
       </div>
       
       <Button
         onClick={() => window.location.hash = 'email-form'}
-        className="w-full h-14 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white"
+        className="w-full h-20 text-3xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300"
         size="lg"
       >
         선물 신청하기
@@ -62,14 +64,7 @@ export function EmailVerification({ state, onApply }: EmailVerificationProps) {
   const renderEmailForm = () => (
     <div className="space-y-6">
       <div className="text-center space-y-4">
-        <h3 className="text-xl font-semibold">선착순 참여를 위해 이메일을 남겨주세요!</h3>
-        <div className="flex items-center justify-center space-x-4">
-          <img 
-            src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
-            alt="terning character" 
-            className="h-16 w-16"
-          />
-        </div>
+        <h3 className="text-2xl font-semibold">선착순 참여를 위해 이메일을 남겨주세요!</h3>
       </div>
       
       <div className="space-y-4">
@@ -78,43 +73,48 @@ export function EmailVerification({ state, onApply }: EmailVerificationProps) {
           placeholder="이메일 주소를 입력해주세요"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="text-center"
+          className="text-center h-14 text-lg"
         />
         <Button
           onClick={handleSubmitEmail}
           disabled={!isEmailValid || state === 'submitting'}
-          className="w-full h-12 text-lg"
+          className="w-full h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl"
           size="lg"
         >
-          {state === 'submitting' ? '접수 중...' : '신청 접수하고 인증 메일 받기'}
+          {state === 'submitting' ? (
+            <div className="flex items-center space-x-2">
+              <img 
+                src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
+                alt="terning character" 
+                className="h-6 w-6 animate-bounce"
+              />
+              <span>접수 중...</span>
+            </div>
+          ) : '신청 접수하기'}
         </Button>
       </div>
     </div>
   );
 
-  const renderPendingVerification = () => (
+  const renderApplicationReceived = () => (
     <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center space-x-4">
+      <div className="text-center space-y-6">
+        <div className="flex items-center justify-center">
           <img 
             src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
-            alt="terning character" 
-            className="h-16 w-16"
+            alt="terning character waiting" 
+            className="h-20 w-20"
           />
-          <span className="text-2xl">💌</span>
         </div>
-        <h3 className="text-xl font-semibold text-primary">
+        <h3 className="text-2xl font-bold text-primary">
           신청이 정상적으로 접수되었습니다!
         </h3>
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-left space-y-2">
-          <p className="text-sm">
-            <span className="font-medium text-primary">{email}</span>으로 발송된 메일을 확인하여
+        <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 text-center space-y-3">
+          <p className="text-lg font-medium">
+            <span className="font-bold text-primary">잠시 후, 입력하신 이메일로 선착순 결과를 안내해 드릴게요.</span>
           </p>
-          <p className="text-sm font-bold text-primary">
-            10분 내에 참여를 확정해주세요.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            최종 확정하셔야 선착순 순위가 안전하게 인정됩니다.
+          <p className="text-sm text-muted-foreground italic">
+            성공하신 분들께는 참여 확정을 위한 인증 메일이 발송됩니다.
           </p>
         </div>
       </div>
@@ -145,8 +145,7 @@ export function EmailVerification({ state, onApply }: EmailVerificationProps) {
   const renderErrorState = () => {
     const messages = {
       'sold-out': '아쉽지만 모든 선물이 소진되었어요. 참여해주신 마음에 진심으로 감사드립니다.',
-      'already-applied': '이미 참여가 완료된 이메일 주소입니다.',
-      'verification-expired': '인증 시간이 만료되었어요. 다시 신청해주세요.'
+      'already-applied': '이미 참여가 완료된 이메일 주소입니다.'
     };
 
     return (
@@ -163,26 +162,19 @@ export function EmailVerification({ state, onApply }: EmailVerificationProps) {
             {messages[state as keyof typeof messages]}
           </p>
         </div>
-        {state === 'verification-expired' && (
-          <Button
-            onClick={() => window.location.reload()}
-            variant="outline"
-            className="w-full"
-          >
-            다시 신청하기
-          </Button>
-        )}
       </div>
     );
   };
 
   return (
-    <Card className="p-8 border-primary/20 max-w-md mx-auto">
-      {state === 'initial' ? renderInitialState() :
-       state === 'email-form' || state === 'submitting' ? renderEmailForm() :
-       state === 'pending-verification' ? renderPendingVerification() :
-       state === 'success' ? renderSuccessState() :
-       renderErrorState()}
-    </Card>
+    <div className="max-w-2xl mx-auto">
+      <Card className="p-8 md:p-12 border-primary/20 shadow-2xl">
+        {state === 'initial' ? renderInitialState() :
+         state === 'email-form' || state === 'submitting' ? renderEmailForm() :
+         state === 'application-received' ? renderApplicationReceived() :
+         state === 'success' ? renderSuccessState() :
+         renderErrorState()}
+      </Card>
+    </div>
   );
 }

@@ -31,10 +31,10 @@ export default function FarewellEvent() {
       } else if (random > 0.9) {
         setVerificationState('already-applied');
       } else {
-        setVerificationState('pending-verification');
+        setVerificationState('application-received');
         toast({
           title: "신청 접수 완료",
-          description: "이메일로 인증 링크를 보냈어요!",
+          description: "이메일로 결과를 안내해 드릴게요!",
         });
       }
     } catch (error) {
@@ -87,17 +87,8 @@ export default function FarewellEvent() {
             />
           </div>
           <div className="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center space-x-2">
-            <img 
-              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
-              alt="terning" 
-              className="h-10 md:h-12"
-            />
+            <span className="font-bold text-white">terning</span>
             <span>과의 마지막 여정</span>
-            <img 
-              src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
-              alt="terning character waving" 
-              className="h-10 md:h-13 ml-2"
-            />
           </div>
           <p className="text-lg opacity-90">
             함께해주셔서 고마워요!
@@ -106,22 +97,16 @@ export default function FarewellEvent() {
       </header>
 
       {/* Thank You Letter */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="p-8 border-primary/20">
-            <div className="text-center space-y-6">
-              <h2 className="text-2xl font-bold text-primary">감사의 마음을 전합니다</h2>
-              <div className="prose prose-lg mx-auto text-muted-foreground">
+      <section className="py-12 bg-background">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <Card className="p-6 border-primary/20">
+            <div className="text-center space-y-4">
+              <h2 className="text-lg font-bold text-primary">감사의 마음을 전합니다</h2>
+              <div className="prose mx-auto text-muted-foreground text-sm">
                 <p>
                   대학생 여러분들의 꿈과 함께했던 terning의 여정이 마무리됩니다.
-                  인턴십을 찾는 모든 순간, 새로운 기회를 발견하는 기쁨, 
-                  그리고 성장해나가는 여러분의 모습을 함께할 수 있어서 정말 행복했습니다.
-                </p>
-                <p>
                   비록 서비스는 끝나지만, 여러분이 꿈꿔온 모든 것들이 
                   현실이 될 수 있기를 진심으로 응원하겠습니다.
-                  terning과 함께한 모든 순간들이 여러분의 소중한 추억이 되기를 바라며,
-                  작은 감사의 마음을 담은 선물을 준비했습니다.
                 </p>
               </div>
             </div>
@@ -130,34 +115,22 @@ export default function FarewellEvent() {
       </section>
 
       {/* Event Info */}
-      <section className="py-12 bg-primary/5">
+      <section className="py-8 bg-primary/5">
         <div className="container mx-auto px-4 max-w-2xl">
-          <div className="text-center space-y-6">
-            <h2 className="text-2xl font-bold">선착순 감사 선물 이벤트</h2>
-            <div className="bg-white p-6 rounded-lg border border-primary/20">
-              <div className="space-y-4 text-left">
-                <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold">📅</span>
-                  <div>
-                    <strong>이벤트 기간:</strong> 서비스 종료 기념 이벤트
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold">🎁</span>
-                  <div>
+          <div className="text-center space-y-4">
+            <h2 className="text-lg font-bold">선착순 감사 선물 이벤트</h2>
+            <div className="bg-white p-4 rounded-lg border border-primary/20 text-sm">
+              <div className="space-y-2 text-left">
+                <div className="flex items-start space-x-2">
+                  <span className="text-primary font-bold text-xs">🎁</span>
+                  <div className="text-xs">
                     <strong>선물 내용:</strong> terning 굿즈와 함께하는 특별한 기념품
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold">⚡</span>
-                  <div>
-                    <strong>참여 방법:</strong> 로그인 후 선착순으로 신청 가능
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold">❗</span>
-                  <div>
-                    <strong>주의사항:</strong> 1인 1회 신청 가능, 선착순 마감
+                <div className="flex items-start space-x-2">
+                  <span className="text-primary font-bold text-xs">⚡</span>
+                  <div className="text-xs">
+                    <strong>참여 방법:</strong> 선착순으로 신청 가능
                   </div>
                 </div>
               </div>
@@ -167,8 +140,8 @@ export default function FarewellEvent() {
       </section>
 
       {/* Event Action Area */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 max-w-2xl">
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
           <EmailVerification
             state={verificationState}
             onApply={handleApply}
@@ -176,33 +149,25 @@ export default function FarewellEvent() {
         </div>
       </section>
 
-      {/* Memory Gallery */}
+      {/* Memory Gallery - Smaller */}
       <MemoryGallery />
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-12">
+      <footer className="bg-primary text-white py-8">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-3 mb-6">
+          <div className="flex items-center justify-center space-x-3 mb-4">
             <img 
               src="/lovable-uploads/97fee445-49bc-4323-8e28-e4d9f2d6c973.png" 
               alt="terning logo" 
-              className="h-8"
-            />
-            <img 
-              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
-              alt="terning" 
               className="h-6"
             />
           </div>
-          <div className="space-y-4">
-            <p className="text-lg font-medium">
+          <div className="space-y-2">
+            <p className="text-sm font-medium">
               terning과 함께한 모든 순간에 감사드립니다
             </p>
-            <p className="opacity-80">
-              여러분의 밝은 미래를 진심으로 응원합니다
-            </p>
-            <div className="pt-6 border-t border-white/20">
-              <p className="text-sm opacity-60">
+            <div className="pt-4 border-t border-white/20">
+              <p className="text-xs opacity-60">
                 © 2024 terning. 모든 추억이 소중합니다.
               </p>
             </div>

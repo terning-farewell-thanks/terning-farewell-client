@@ -10,12 +10,12 @@ export default function FarewellEvent() {
   const { toast } = useToast();
 
   // Mock API calls - replace with actual API endpoints
-  const handleSendCode = async (email: string) => {
+  const handleApply = async (email: string) => {
     try {
-      setVerificationState('sending');
+      setVerificationState('submitting');
       
       // Mock API call
-      // const response = await fetch('/api/auth/signup', {
+      // const response = await fetch('/api/event/apply', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify({ email })
@@ -24,55 +24,25 @@ export default function FarewellEvent() {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      setVerificationState('verification');
-      
-      toast({
-        title: "인증번호 전송 완료",
-        description: `${email}로 인증번호를 보냈어요.`,
-      });
+      // For demo, simulate different outcomes
+      const random = Math.random();
+      if (random > 0.8) {
+        setVerificationState('sold-out');
+      } else if (random > 0.9) {
+        setVerificationState('already-applied');
+      } else {
+        setVerificationState('pending-verification');
+        toast({
+          title: "신청 접수 완료",
+          description: "이메일로 인증 링크를 보냈어요!",
+        });
+      }
     } catch (error) {
       setVerificationState('initial');
       toast({
         variant: "destructive",
-        title: "전송 실패",
-        description: "다시 시도해주세요.",
-      });
-    }
-  };
-
-  const handleVerifyAndApply = async (email: string, code: string) => {
-    try {
-      setVerificationState('applying');
-      
-      // Mock API call
-      // const response = await fetch('/api/event/apply', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, verificationCode: code })
-      // });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // For demo, simulate different outcomes
-      const random = Math.random();
-      if (random > 0.7) {
-        setVerificationState('sold-out');
-      } else if (random > 0.85) {
-        setVerificationState('already-applied');
-      } else {
-        setVerificationState('success');
-        toast({
-          title: "신청 완료",
-          description: "감사 선물 신청이 완료되었습니다!",
-        });
-      }
-    } catch (error) {
-      setVerificationState('verification');
-      toast({
-        variant: "destructive",
         title: "신청 실패",
-        description: "인증번호가 올바르지 않아요.",
+        description: "다시 시도해주세요.",
       });
     }
   };
@@ -92,6 +62,11 @@ export default function FarewellEvent() {
 
   useEffect(() => {
     checkEventStatus();
+    
+    // Check if we need to show email form based on URL hash
+    if (window.location.hash === '#email-form') {
+      setVerificationState('email-form');
+    }
   }, []);
 
   return (
@@ -99,14 +74,29 @@ export default function FarewellEvent() {
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-primary-light text-white py-8">
         <div className="container mx-auto px-4 text-center">
-          <TerningLogo className="text-white mb-4 mx-auto" />
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <img 
+              src="/lovable-uploads/97fee445-49bc-4323-8e28-e4d9f2d6c973.png" 
+              alt="terning logo" 
+              className="h-10 md:h-12"
+            />
+            <img 
+              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
+              alt="terning" 
+              className="h-8 md:h-10"
+            />
+          </div>
           <div className="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center space-x-2">
-            <TerningLogo variant="text-only" className="h-8 md:h-10" />
+            <img 
+              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
+              alt="terning" 
+              className="h-10 md:h-12"
+            />
             <span>과의 마지막 여정</span>
             <img 
               src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
               alt="terning character waving" 
-              className="h-8 md:h-10 ml-2"
+              className="h-10 md:h-13 ml-2"
             />
           </div>
           <p className="text-lg opacity-90">
@@ -181,8 +171,7 @@ export default function FarewellEvent() {
         <div className="container mx-auto px-4 max-w-2xl">
           <EmailVerification
             state={verificationState}
-            onSendCode={handleSendCode}
-            onVerifyAndApply={handleVerifyAndApply}
+            onApply={handleApply}
           />
         </div>
       </section>
@@ -193,7 +182,18 @@ export default function FarewellEvent() {
       {/* Footer */}
       <footer className="bg-primary text-white py-12">
         <div className="container mx-auto px-4 text-center">
-          <TerningLogo className="text-white mb-6 mx-auto" />
+          <div className="flex items-center justify-center space-x-3 mb-6">
+            <img 
+              src="/lovable-uploads/97fee445-49bc-4323-8e28-e4d9f2d6c973.png" 
+              alt="terning logo" 
+              className="h-8"
+            />
+            <img 
+              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
+              alt="terning" 
+              className="h-6"
+            />
+          </div>
           <div className="space-y-4">
             <p className="text-lg font-medium">
               terning과 함께한 모든 순간에 감사드립니다

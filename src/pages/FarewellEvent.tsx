@@ -1,58 +1,78 @@
 import { useState, useEffect } from 'react';
 import { TerningLogo } from '@/components/TerningLogo';
-import { EventStatus, EventState } from '@/components/EventStatus';
+import { EmailVerification, VerificationState } from '@/components/EmailVerification';
 import { MemoryGallery } from '@/components/MemoryGallery';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
 export default function FarewellEvent() {
-  const [eventState, setEventState] = useState<EventState>('logout');
-  const [userName, setUserName] = useState<string>('');
+  const [verificationState, setVerificationState] = useState<VerificationState>('initial');
   const { toast } = useToast();
 
   // Mock API calls - replace with actual API endpoints
-  const handleLogin = async () => {
+  const handleSendCode = async (email: string) => {
     try {
-      // Mock login API call
-      // const response = await fetch('/api/login', { method: 'POST' });
+      setVerificationState('sending');
       
-      // For demo, simulate successful login
-      setUserName('자바리스미스주니어');
-      setEventState('login-ready');
+      // Mock API call
+      // const response = await fetch('/api/auth/signup', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email })
+      // });
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setVerificationState('verification');
       
       toast({
-        title: "로그인 성공",
-        description: "환영합니다!",
+        title: "인증번호 전송 완료",
+        description: `${email}로 인증번호를 보냈어요.`,
       });
     } catch (error) {
+      setVerificationState('initial');
       toast({
         variant: "destructive",
-        title: "로그인 실패",
+        title: "전송 실패",
         description: "다시 시도해주세요.",
       });
     }
   };
 
-  const handleApply = async () => {
+  const handleVerifyAndApply = async (email: string, code: string) => {
     try {
-      setEventState('loading');
+      setVerificationState('applying');
       
       // Mock API call
-      // const response = await fetch('/api/event/apply', { method: 'POST' });
+      // const response = await fetch('/api/event/apply', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email, verificationCode: code })
+      // });
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // For demo, randomly show success or sold-out
-      const isSuccess = Math.random() > 0.3;
-      setEventState(isSuccess ? 'success' : 'sold-out');
-      
+      // For demo, simulate different outcomes
+      const random = Math.random();
+      if (random > 0.7) {
+        setVerificationState('sold-out');
+      } else if (random > 0.85) {
+        setVerificationState('already-applied');
+      } else {
+        setVerificationState('success');
+        toast({
+          title: "신청 완료",
+          description: "감사 선물 신청이 완료되었습니다!",
+        });
+      }
     } catch (error) {
-      setEventState('login-ready');
+      setVerificationState('verification');
       toast({
         variant: "destructive",
         title: "신청 실패",
-        description: "다시 시도해주세요.",
+        description: "인증번호가 올바르지 않아요.",
       });
     }
   };
@@ -63,8 +83,8 @@ export default function FarewellEvent() {
       // const response = await fetch('/api/event/status');
       // const data = await response.json();
       
-      // For demo purposes, start with logout state
-      setEventState('logout');
+      // For demo purposes, start with initial state
+      setVerificationState('initial');
     } catch (error) {
       console.error('Failed to check event status:', error);
     }
@@ -80,9 +100,15 @@ export default function FarewellEvent() {
       <header className="bg-gradient-to-r from-primary to-primary-light text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <TerningLogo className="text-white mb-4 mx-auto" />
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">
-            terning과의 마지막 여정
-          </h1>
+          <div className="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center space-x-2">
+            <TerningLogo variant="text-only" className="h-8 md:h-10" />
+            <span>과의 마지막 여정</span>
+            <img 
+              src="/lovable-uploads/c311e70c-2e83-43fe-835f-4287b4e5fe34.png" 
+              alt="terning character waving" 
+              className="h-8 md:h-10 ml-2"
+            />
+          </div>
           <p className="text-lg opacity-90">
             함께해주셔서 고마워요!
           </p>
@@ -153,11 +179,10 @@ export default function FarewellEvent() {
       {/* Event Action Area */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-2xl">
-          <EventStatus
-            state={eventState}
-            userName={userName}
-            onLogin={handleLogin}
-            onApply={handleApply}
+          <EmailVerification
+            state={verificationState}
+            onSendCode={handleSendCode}
+            onVerifyAndApply={handleVerifyAndApply}
           />
         </div>
       </section>

@@ -1,73 +1,54 @@
-# Welcome to your Lovable project
+# Terning's Final Gift - Client
 
-## Project info
+This is the front-end client for the 'Terning's Final Gift' event platform, designed to provide a seamless and responsive user experience.
 
-**URL**: https://lovable.dev/projects/391d84ad-b098-4f69-ad88-061995a4d495
+## ✨ Features
 
-## How can I edit this code?
+- View event details and countdowns.
+- Secure user login and session management.
+- Real-time application status display (e.g., "Applying...", "Success!", "Sold Out").
+- Fully responsive design for both desktop and mobile views.
 
-There are several ways of editing your application.
+## 🛠️ Tech Stack
 
-**Use Lovable**
+- **Framework**: React (or Vue.js, etc.)
+- **State Management**: Redux Toolkit (or Recoil, etc.)
+- **HTTP Client**: Axios
+- **Styling**: Styled-Components (or Tailwind CSS, etc.)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/391d84ad-b098-4f69-ad88-061995a4d495) and start prompting.
+## 🚀 Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+Follow these instructions to set up and run the client locally.
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js (v18.x or higher)
+- npm or yarn
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation & Setup
 
-Follow these steps:
+1.  **Navigate to the client directory:**
+    ```bash
+    cd client
+    ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3.  **Set up environment variables:**
+    Create a `.env` file in the `client` directory and add the back-end server's URL.
 
-# Step 3: Install the necessary dependencies.
-npm i
+    ```
+    REACT_APP_API_BASE_URL=http://localhost:8080
+    ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Available Scripts
 
-**Edit a file directly in GitHub**
+- **Run in development mode:**
+  ```bash
+  npm start
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/391d84ad-b098-4f69-ad88-061995a4d495) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)

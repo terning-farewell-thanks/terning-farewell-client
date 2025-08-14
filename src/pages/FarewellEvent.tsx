@@ -67,6 +67,19 @@ export default function FarewellEvent() {
     if (window.location.hash === '#email-form') {
       setVerificationState('email-form');
     }
+
+    // Listen for hash changes
+    const handleHashChange = () => {
+      if (window.location.hash === '#email-form') {
+        setVerificationState('email-form');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   return (

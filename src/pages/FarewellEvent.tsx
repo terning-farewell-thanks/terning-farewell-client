@@ -5,44 +5,127 @@ import { MemoryGallery } from '@/components/MemoryGallery';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
+const API_BASE_URL = 'https://your-api-server.com'; // Replace with actual API URL
+
 export default function FarewellEvent() {
   const [verificationState, setVerificationState] = useState<VerificationState>('initial');
+  const [email, setEmail] = useState('');
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Mock API calls - replace with actual API endpoints
-  const handleApply = async (email: string) => {
+  // API call functions
+  const sendVerificationCode = async (email: string): Promise<void> => {
     try {
-      setVerificationState('submitting');
-      
-      // Mock API call
-      // const response = await fetch('/api/event/apply', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email })
-      // });
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // For demo, simulate different outcomes
-      const random = Math.random();
-      if (random > 0.8) {
-        setVerificationState('sold-out');
-      } else if (random > 0.9) {
-        setVerificationState('already-applied');
+      const response = await fetch(`${API_BASE_URL}/api/auth/send-verification-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setVerificationState('code-verification');
+        toast({
+          title: "인증 코드 발송 완료",
+          description: "이메일로 인증 코드가 발송되었습니다.",
+        });
       } else {
+        throw new Error('Failed to send verification code');
+      }
+    } catch (error) {
+      console.error('Error sending verification code:', error);
+      setVerificationState('error');
+      toast({
+        title: "발송 실패",
+        description: "인증 코드 발송에 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const verifyCode = async (email: string, code: string): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, code }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token || data.access_token;
+        setAuthToken(token);
+        setVerificationState('verified');
+        toast({
+          title: "인증 완료",
+          description: "이메일 인증이 완료되었습니다.",
+        });
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Invalid verification code');
+      }
+    } catch (error) {
+      console.error('Error verifying code:', error);
+      toast({
+        title: "인증 실패",
+        description: "인증 코드가 올바르지 않습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const applyForGift = async (): Promise<void> => {
+    if (!authToken) {
+      toast({
+        title: "인증 오류",
+        description: "먼저 이메일 인증을 완료해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setVerificationState('applying');
+
+      const response = await fetch(`${API_BASE_URL}/api/event/apply`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 202) {
         setVerificationState('application-received');
         toast({
           title: "신청 접수 완료",
-          description: "이메일로 결과를 안내해 드릴게요!",
+          description: "선물 신청이 정상적으로 접수되었습니다.",
         });
+      } else if (response.status === 409) {
+        const errorData = await response.json();
+        if (errorData.message?.includes('already applied')) {
+          setVerificationState('already-applied');
+        } else {
+          setVerificationState('sold-out');
+        }
+        toast({
+          title: "신청 불가",
+          description: errorData.message || "신청에 실패했습니다.",
+          variant: "destructive",
+        });
+      } else {
+        throw new Error('Application failed');
       }
     } catch (error) {
-      setVerificationState('initial');
+      console.error('Error applying for gift:', error);
+      setVerificationState('error');
       toast({
-        variant: "destructive",
         title: "신청 실패",
-        description: "다시 시도해주세요.",
+        description: "신청 중 오류가 발생했습니다. 다시 시도해주세요.",
+        variant: "destructive",
       });
     }
   };
@@ -63,15 +146,15 @@ export default function FarewellEvent() {
   useEffect(() => {
     checkEventStatus();
     
-    // Check if we need to show email form based on URL hash
-    if (window.location.hash === '#email-form') {
-      setVerificationState('email-form');
+    // Check if we need to show email verification based on URL hash
+    if (window.location.hash === '#email-verification') {
+      setVerificationState('email-verification');
     }
 
     // Listen for hash changes
     const handleHashChange = () => {
-      if (window.location.hash === '#email-form') {
-        setVerificationState('email-form');
+      if (window.location.hash === '#email-verification') {
+        setVerificationState('email-verification');
       }
     };
 
@@ -157,7 +240,11 @@ export default function FarewellEvent() {
         <div className="container mx-auto px-4">
           <EmailVerification
             state={verificationState}
-            onApply={handleApply}
+            onSendCode={sendVerificationCode}
+            onVerifyCode={verifyCode}
+            onApply={applyForGift}
+            email={email}
+            setEmail={setEmail}
           />
         </div>
       </section>

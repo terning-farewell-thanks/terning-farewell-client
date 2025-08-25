@@ -5,7 +5,7 @@ import { MemoryGallery } from '@/components/MemoryGallery';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
-const API_BASE_URL = 'https://your-api-server.com'; // Replace with actual API URL
+const API_BASE_URL = 'http://43.201.94.45:8080';
 
 export default function FarewellEvent() {
   const [verificationState, setVerificationState] = useState<VerificationState>('initial');

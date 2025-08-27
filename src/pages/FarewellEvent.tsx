@@ -51,6 +51,11 @@ export default function FarewellEvent() {
     }
   };
 
+  // 신청 시작 핸들러
+  const handleStartApplication = () => {
+    setVerificationState('email-verification');
+  };
+
   // 선물 신청 핸들러
   const handleApplyForGift = async () => {
     if (!authToken) {
@@ -148,6 +153,7 @@ export default function FarewellEvent() {
             onSendCode={handleSendCode}
             onVerifyCode={handleVerifyCode}
             onApply={handleApplyForGift}
+            onStartApplication={handleStartApplication}
             email={email}
             setEmail={setEmail}
           />

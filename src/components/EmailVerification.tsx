@@ -21,6 +21,7 @@ interface EmailVerificationProps {
   onSendCode: (email: string) => Promise<void>;
   onVerifyCode: (email: string, code: string) => Promise<void>;
   onApply: () => Promise<void>;
+  onStartApplication: () => void;
   email: string;
   setEmail: (email: string) => void;
 }
@@ -30,6 +31,7 @@ export function EmailVerification({
   onSendCode, 
   onVerifyCode, 
   onApply, 
+  onStartApplication,
   email, 
   setEmail 
 }: EmailVerificationProps) {
@@ -83,7 +85,7 @@ export function EmailVerification({
       </div>
       
       <Button
-        onClick={() => window.location.hash = 'email-verification'}
+        onClick={onStartApplication}
         className="w-full h-20 text-3xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300"
         size="lg"
       >

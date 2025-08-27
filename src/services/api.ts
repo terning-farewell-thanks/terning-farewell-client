@@ -1,5 +1,5 @@
 // Vite 환경 변수에서 API 기본 URL을 가져옵니다.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.terning-farewell.p-e.kr';
 
 /**
  * API 요청을 위한 범용 헬퍼 함수입니다.
@@ -9,23 +9,35 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
  * @returns 성공 시 서버 응답의 `data` 필드
  */
 async function apiFetch(endpoint: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-  const responseData = await response.json();
-
-  if (!response.ok) {
-    // 서버가 보낸 에러 메시지가 있다면 그것을 사용하고, 없다면 기본 에러 메시지를 생성합니다.
-    throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
-  }
+  console.log('API 요청:', `${API_BASE_URL}${endpoint}`, options);
   
-  // Spring Boot의 SuccessResponse 형식에 맞춰 실제 데이터는 `data` 필드에 담겨있으므로 `data`를 반환합니다.
-  return responseData.data;
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    console.log('API 응답 상태:', response.status, response.statusText);
+    
+    const responseData = await response.json();
+    console.log('API 응답 데이터:', responseData);
+
+    if (!response.ok) {
+      // 서버가 보낸 에러 메시지가 있다면 그것을 사용하고, 없다면 기본 에러 메시지를 생성합니다.
+      throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+    }
+    
+    // Spring Boot의 SuccessResponse 형식에 맞춰 실제 데이터는 `data` 필드에 담겨있으므로 `data`를 반환합니다.
+    return responseData.data;
+  } catch (error) {
+    console.error('API 요청 실패:', error);
+    throw error;
+  }
 }
 
 // 1. 이메일 인증 코드 발송 API
@@ -57,7 +69,7 @@ export const applyForGift = (authToken: string): Promise<void> => {
   });
 };
 
-// 4. 신청 상태 조회 API (필요 시 사용)
+// 4. 신청 상태 조회 API
 interface StatusResponse {
   status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'NONE';
 }
@@ -68,4 +80,53 @@ export const checkApplicationStatus = (authToken: string): Promise<StatusRespons
             'Authorization': `Bearer ${authToken}`,
         },
     });
+};
+
+// API 테스트 함수들
+export const testSendCode = async (email: string) => {
+  console.log('🧪 이메일 코드 발송 테스트:', email);
+  try {
+    await sendVerificationCode(email);
+    console.log('✅ 이메일 코드 발송 성공');
+    return true;
+  } catch (error) {
+    console.error('❌ 이메일 코드 발송 실패:', error);
+    return false;
+  }
+};
+
+export const testVerifyCode = async (email: string, code: string) => {
+  console.log('🧪 코드 인증 테스트:', email, code);
+  try {
+    const result = await verifyCode(email, code);
+    console.log('✅ 코드 인증 성공:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ 코드 인증 실패:', error);
+    return null;
+  }
+};
+
+export const testApplyGift = async (token: string) => {
+  console.log('🧪 선물 신청 테스트:', token);
+  try {
+    await applyForGift(token);
+    console.log('✅ 선물 신청 성공');
+    return true;
+  } catch (error) {
+    console.error('❌ 선물 신청 실패:', error);
+    return false;
+  }
+};
+
+export const testCheckStatus = async (token: string) => {
+  console.log('🧪 상태 조회 테스트:', token);
+  try {
+    const result = await checkApplicationStatus(token);
+    console.log('✅ 상태 조회 성공:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ 상태 조회 실패:', error);
+    return null;
+  }
 };

@@ -2,14 +2,17 @@ import { useState } from 'react';
 import { TerningLogo } from '@/components/TerningLogo';
 import { EmailVerification, VerificationState } from '@/components/EmailVerification';
 import { MemoryGallery } from '@/components/MemoryGallery';
+import { ApiTester } from '@/components/ApiTester';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import * as api from '@/services/api'; 
+import * as api from '@/services/api';
 
 export default function FarewellEvent() {
   const [verificationState, setVerificationState] = useState<VerificationState>('initial');
   const [email, setEmail] = useState('');
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [showApiTester, setShowApiTester] = useState(false);
   const { toast } = useToast();
 
   // 이메일 인증 코드 발송 핸들러
@@ -148,15 +151,41 @@ export default function FarewellEvent() {
       {/* Event Action Area */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <EmailVerification
-            state={verificationState}
-            onSendCode={handleSendCode}
-            onVerifyCode={handleVerifyCode}
-            onApply={handleApplyForGift}
-            onStartApplication={handleStartApplication}
-            email={email}
-            setEmail={setEmail}
-          />
+          {showApiTester ? (
+            <div className="space-y-4">
+              <div className="text-center">
+                <Button 
+                  onClick={() => setShowApiTester(false)}
+                  variant="outline"
+                  className="mb-6"
+                >
+                  ← 이벤트 페이지로 돌아가기
+                </Button>
+              </div>
+              <ApiTester />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="text-center">
+                <Button 
+                  onClick={() => setShowApiTester(true)}
+                  variant="outline"
+                  className="mb-6"
+                >
+                  🧪 API 테스트 도구 열기
+                </Button>
+              </div>
+              <EmailVerification
+                state={verificationState}
+                onSendCode={handleSendCode}
+                onVerifyCode={handleVerifyCode}
+                onApply={handleApplyForGift}
+                onStartApplication={handleStartApplication}
+                email={email}
+                setEmail={setEmail}
+              />
+            </div>
+          )}
         </div>
       </section>
 

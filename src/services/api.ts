@@ -1,5 +1,5 @@
-// Vite 환경 변수에서 API 기본 URL을 가져옵니다.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.terning-farewell.p-e.kr';
+// API 기본 URL을 직접 설정합니다.
+const API_BASE_URL = 'https://www.terning-farewell.p-e.kr';
 
 /**
  * API 요청을 위한 범용 헬퍼 함수입니다.
@@ -32,8 +32,8 @@ async function apiFetch(endpoint: string, options: RequestInit = {}) {
       throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
     }
     
-    // Spring Boot의 SuccessResponse 형식에 맞춰 실제 데이터는 `data` 필드에 담겨있으므로 `data`를 반환합니다.
-    return responseData.data;
+    // 응답 데이터를 그대로 반환 (data 필드가 있으면 data, 없으면 전체 응답)
+    return responseData.data || responseData;
   } catch (error) {
     console.error('API 요청 실패:', error);
     throw error;
@@ -129,4 +129,17 @@ export const testCheckStatus = async (token: string) => {
     console.error('❌ 상태 조회 실패:', error);
     return null;
   }
+};
+
+// 5. 이벤트 재고 확인 API (관리자용)
+interface StockResponse {
+  stock: number;
+}
+export const checkEventStock = (authToken: string): Promise<StockResponse> => {
+  return apiFetch('/api/admin/event/stock', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${authToken}`,
+    },
+  });
 };

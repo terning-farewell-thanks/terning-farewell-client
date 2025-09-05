@@ -35,7 +35,7 @@ export default function FarewellEvent() {
   const handleVerifyCode = async (emailToVerify: string, code: string) => {
     try {
       const response = await api.verifyCode(emailToVerify, code);
-      setAuthToken(response.token); // 서버 응답 구조에 맞게 response.token으로 수정
+      setAuthToken(response.temporaryToken); // API 명세에 맞게 temporaryToken 사용
       setVerificationState('verified');
       toast({
         title: "인증 완료",

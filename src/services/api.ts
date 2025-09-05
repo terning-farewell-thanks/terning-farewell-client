@@ -50,12 +50,18 @@ export const sendVerificationCode = (email: string): Promise<void> => {
 
 // 2. 이메일 인증 코드 확인 API
 interface AuthResponse {
-  token: string;
+  temporaryToken: string;
 }
 export const verifyCode = (email: string, code: string): Promise<AuthResponse> => {
   return apiFetch('/api/auth/verify-code', {
     method: 'POST',
     body: JSON.stringify({ email, code }),
+  }).then(response => {
+    // API 명세에 따라 result.temporaryToken 추출
+    if (response.result && response.result.temporaryToken) {
+      return { temporaryToken: response.result.temporaryToken };
+    }
+    throw new Error('토큰을 받지 못했습니다.');
   });
 };
 

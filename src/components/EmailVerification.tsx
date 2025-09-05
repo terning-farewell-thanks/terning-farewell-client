@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 export type VerificationState = 
   | 'initial' 
@@ -36,7 +37,19 @@ export function EmailVerification({
   setEmail 
 }: EmailVerificationProps) {
   const [verificationCode, setVerificationCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
   const { toast } = useToast();
+
+  // 쿨다운 타이머 효과
+  useEffect(() => {
+    if (cooldownTime > 0) {
+      const timer = setTimeout(() => {
+        setCooldownTime(cooldownTime - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldownTime]);
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -46,26 +59,66 @@ export function EmailVerification({
   const isCodeValid = verificationCode.length === 6;
 
   const handleSendCode = async () => {
+    if (isLoading || cooldownTime > 0) return;
+    
+    setIsLoading(true);
     try {
       await onSendCode(email);
+      // 성공 시 60초 쿨다운 시작
+      setCooldownTime(60);
+      toast({
+        title: "인증번호가 발송되었습니다",
+        description: "이메일을 확인해주세요.",
+      });
     } catch (error) {
       console.error('Failed to send verification code:', error);
+      toast({
+        title: "전송 실패",
+        description: "요청에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleVerifyCode = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       await onVerifyCode(email, verificationCode);
+      toast({
+        title: "인증이 완료되었습니다",
+        description: "이제 선물을 신청할 수 있습니다.",
+      });
     } catch (error) {
       console.error('Failed to verify code:', error);
+      toast({
+        title: "인증 실패",
+        description: "인증번호를 다시 확인해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleApply = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       await onApply();
     } catch (error) {
       console.error('Failed to apply:', error);
+      toast({
+        title: "신청 실패",
+        description: "신청에 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,62 +147,95 @@ export function EmailVerification({
     </div>
   );
 
-  const renderEmailVerification = () => (
-    <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <h3 className="text-2xl font-semibold">이메일 인증을 진행해주세요!</h3>
-        <p className="text-muted-foreground">입력하신 이메일로 인증 코드를 발송해 드립니다.</p>
-      </div>
-      
-      <div className="space-y-4">
-        <Input
-          type="email"
-          placeholder="이메일 주소를 입력해주세요"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="text-center h-14 text-lg"
-        />
-        <Button
-          onClick={handleSendCode}
-          disabled={!isEmailValid}
-          className="w-full h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl"
-          size="lg"
-        >
-          인증 코드 요청
-        </Button>
-      </div>
-    </div>
-  );
+  const renderEmailVerification = () => {
+    const getButtonText = () => {
+      if (isLoading) return "전송 중...";
+      if (cooldownTime > 0) return `재전송 (${cooldownTime}초)`;
+      if (state === 'code-verification') return "재전송";
+      return "인증 코드 요청";
+    };
 
-  const renderCodeVerification = () => (
-    <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <h3 className="text-2xl font-semibold">인증 코드를 입력해주세요</h3>
-        <p className="text-muted-foreground">
-          <strong>{email}</strong>으로 발송된 6자리 인증 코드를 입력해주세요.
-        </p>
+    return (
+      <div className="space-y-6">
+        <div className="text-center space-y-4">
+          <h3 className="text-2xl font-semibold">이메일 인증을 진행해주세요!</h3>
+          <p className="text-muted-foreground">입력하신 이메일로 인증 코드를 발송해 드립니다.</p>
+        </div>
+        
+        <div className="space-y-4">
+          <Input
+            type="email"
+            placeholder="이메일 주소를 입력해주세요"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="text-center h-14 text-lg"
+            disabled={state === 'code-verification'}
+            readOnly={state === 'code-verification'}
+          />
+          <Button
+            onClick={handleSendCode}
+            disabled={!isEmailValid || isLoading || cooldownTime > 0}
+            className="w-full h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl"
+            size="lg"
+          >
+            {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+            {getButtonText()}
+          </Button>
+        </div>
       </div>
-      
-      <div className="space-y-4">
-        <Input
-          type="text"
-          placeholder="123456"
-          value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value)}
-          maxLength={6}
-          className="text-center h-14 text-2xl tracking-widest"
-        />
-        <Button
-          onClick={handleVerifyCode}
-          disabled={!isCodeValid}
-          className="w-full h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl"
-          size="lg"
-        >
-          확인
-        </Button>
+    );
+  };
+
+  const renderCodeVerification = () => {
+    const getButtonText = () => {
+      if (isLoading) return "재전송 중...";
+      if (cooldownTime > 0) return `재전송 (${cooldownTime}초)`;
+      return "재전송";
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="text-center space-y-4">
+          <h3 className="text-2xl font-semibold">인증 코드를 입력해주세요</h3>
+          <p className="text-muted-foreground">
+            <strong>{email}</strong>으로 발송된 6자리 인증 코드를 입력해주세요.
+          </p>
+        </div>
+        
+        <div className="space-y-4">
+          <Input
+            type="text"
+            placeholder="123456"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            maxLength={6}
+            className="text-center h-14 text-2xl tracking-widest"
+            autoFocus
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              onClick={handleSendCode}
+              disabled={isLoading || cooldownTime > 0}
+              variant="outline"
+              className="h-16 text-lg"
+            >
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {getButtonText()}
+            </Button>
+            <Button
+              onClick={handleVerifyCode}
+              disabled={!isCodeValid || isLoading}
+              className="h-16 text-xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl"
+              size="lg"
+            >
+              {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+              확인
+            </Button>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderVerified = () => (
     <div className="space-y-6">
@@ -167,10 +253,12 @@ export function EmailVerification({
       
       <Button
         onClick={handleApply}
+        disabled={isLoading}
         className="w-full h-20 text-3xl font-bold bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300"
         size="lg"
       >
-        선물 신청하기
+        {isLoading && <Loader2 className="mr-3 h-6 w-6 animate-spin" />}
+        {isLoading ? "신청 중..." : "선물 신청하기"}
       </Button>
     </div>
   );

@@ -9,27 +9,38 @@ jobs:
     name: Build and Deploy Client
     runs-on: ubuntu-latest
     steps:
-      - name: 프론트엔드 소스 코드 체크아웃
+      - name: Checkout frontend source code
         uses: actions/checkout@v4
 
-      - name: Node.js 20.x 버전 설정
+      - name: Set up Node.js v20.x
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      - name: 프론트엔드 의존성 설치
+      - name: Install frontend dependencies
         run: npm install
         
-      - name: .env.production 파일 생성
+      - name: Create .env.production file
         run: |
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env.production
           
-      - name: 프론트엔드 빌드
+      - name: Build frontend
         run: npm run build
 
-      - name: EC2 서버에 프론트엔드 dist 폴더 업로드
+      # --- 여기가 수정된 부분입니다 ---
+      # 1. 먼저 기존에 배포된 파일들만 삭제합니다.
+      - name: Delete previous deployment files
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          script: rm -rf /var/www/terning-farewell/*
+
+      # 2. 새로 빌드한 파일을 업로드합니다.
+      - name: Upload new frontend files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -37,4 +48,4 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           source: "dist"
           target: "/var/www/terning-farewell"
-          rm: true
+          # rm: true 옵션을 제거하여 권한 문제를 해결했습니다.

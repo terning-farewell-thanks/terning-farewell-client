@@ -29,7 +29,7 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      # --- 여기가 수정된 부분입니다 ---
+
       # 1. 먼저 기존에 배포된 파일들만 삭제합니다.
       - name: Delete previous deployment files
         uses: appleboy/ssh-action@v1.0.3
@@ -48,4 +48,3 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           source: "dist"
           target: "/var/www/terning-farewell"
-          # rm: true 옵션을 제거하여 권한 문제를 해결했습니다.

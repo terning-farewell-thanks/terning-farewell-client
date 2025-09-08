@@ -90,12 +90,12 @@ export default function FarewellEvent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-gradient-to-r from-primary to-primary-light text-white py-16 md:py-20">
+      <header className="bg-gradient-to-r from-primary to-primary-light text-white py-10 md:py-12">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-4 mb-8">
+          <div className="flex items-center justify-center space-x-4 mb-6">
             <TerningLogo className="h-28 md:h-36 lg:h-44" />
           </div>
-          <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 flex items-center justify-center space-x-4">
+          <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 flex items-center justify-center space-x-4">
             <span className="font-bold text-white">terning</span>
             <span>과의 마지막 여정</span>
           </div>
@@ -172,9 +172,9 @@ export default function FarewellEvent() {
       <MemoryGallery />
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-12 md:py-16">
+      <footer className="bg-primary text-white py-8 md:py-10">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-3 mb-6">
+          <div className="flex items-center justify-center space-x-3 mb-4">
             <TerningLogo className="h-8 md:h-10" />
           </div>
           <div className="space-y-4">

@@ -94,7 +94,6 @@ export default function FarewellEvent() {
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
             <TerningLogo className="h-10 md:h-12" />
-            <img src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" alt="terning" className="h-8 md:h-10" />
           </div>
           <div className="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center space-x-2">
             <span className="font-bold text-white">terning</span>
@@ -112,7 +111,10 @@ export default function FarewellEvent() {
               <h2 className="text-lg font-bold text-primary">감사의 마음을 전합니다</h2>
               <div className="prose mx-auto text-muted-foreground text-sm">
                 <p>
-                  대학생 여러분들의 꿈과 함께했던 terning의 여정이 마무리됩니다. 비록 서비스는 끝나지만, 여러분이 꿈꿔온 모든 것들이 현실이 될 수 있기를 진심으로 응원하겠습니다.
+                  대학생 여러분들의 꿈과 함께했던 terning의 여정이 마무리됩니다.
+                </p>
+                <p>
+                  비록 서비스는 끝나지만, 여러분이 꿈꿔온 모든 것들이 현실이 될 수 있기를 진심으로 응원하겠습니다.
                 </p>
               </div>
             </div>
@@ -136,7 +138,13 @@ export default function FarewellEvent() {
                 <div className="flex items-start space-x-2">
                   <span className="text-primary font-bold text-xs">⚡</span>
                   <div className="text-xs">
-                    <strong>참여 방법:</strong> 선착순으로 신청 가능
+                    <div><strong>참여 방법:</strong></div>
+                    <div className="mt-1 space-y-0.5">
+                      <div>1. 하단의 '선물 신청하기' 버튼 클릭</div>
+                      <div>2. 메일 주소 입력</div>
+                      <div>3. 인증번호 입력</div>
+                      <div>4. 인증 완료되면 '신청하기' 버튼 누르기</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -146,7 +154,7 @@ export default function FarewellEvent() {
       </section>
 
       {/* Event Action Area */}
-      <section className="py-20 bg-background">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <EmailVerification
             state={verificationState}
@@ -172,7 +180,7 @@ export default function FarewellEvent() {
           <div className="space-y-2">
             <p className="text-sm font-medium">terning과 함께한 모든 순간에 감사드립니다</p>
             <div className="pt-4 border-t border-white/20">
-              <p className="text-xs opacity-60">© 2024 terning. 모든 추억이 소중합니다.</p>
+              <p className="text-xs opacity-60">© 2025 terning. 모든 추억이 소중합니다.</p>
             </div>
           </div>
         </div>

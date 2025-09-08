@@ -175,7 +175,16 @@ export default function FarewellEvent() {
       <footer className="bg-primary text-white py-8 md:py-10">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <TerningLogo className="h-8 md:h-10" />
+            <img 
+              src="/lovable-uploads/97fee445-49bc-4323-8e28-e4d9f2d6c973.png" 
+              alt="terning logo" 
+              className="h-6 md:h-7"
+            />
+            <img 
+              src="/lovable-uploads/8facd738-0863-4ac2-9b15-1d70d1159e3c.png" 
+              alt="terning" 
+              className="h-5 md:h-6"
+            />
           </div>
           <div className="space-y-4">
             <p className="text-base md:text-lg font-medium">terning과 함께한 모든 순간에 감사드립니다</p>

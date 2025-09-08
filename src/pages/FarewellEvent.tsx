@@ -93,7 +93,7 @@ export default function FarewellEvent() {
       <header className="bg-gradient-to-r from-primary to-primary-light text-white py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-4 mb-8">
-            <TerningLogo className="h-20 md:h-24 lg:h-32" />
+            <TerningLogo className="h-28 md:h-36 lg:h-44" />
           </div>
           <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 flex items-center justify-center space-x-4">
             <span className="font-bold text-white">terning</span>

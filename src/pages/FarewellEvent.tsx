@@ -92,14 +92,14 @@ export default function FarewellEvent() {
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-primary-light text-white py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <TerningLogo className="h-16 md:h-20 lg:h-24" />
+          <div className="flex items-center justify-center space-x-4 mb-8">
+            <TerningLogo className="h-20 md:h-24 lg:h-32" />
           </div>
-          <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex items-center justify-center space-x-3">
+          <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 flex items-center justify-center space-x-4">
             <span className="font-bold text-white">terning</span>
             <span>과의 마지막 여정</span>
           </div>
-          <p className="text-xl md:text-2xl opacity-90">함께해주셔서 고마워요!</p>
+          <p className="text-2xl md:text-3xl opacity-90">함께해주셔서 고마워요!</p>
         </div>
       </header>
 
@@ -122,7 +122,22 @@ export default function FarewellEvent() {
         </div>
       </section>
 
-      {/* Event Info */}
+      {/* Event Action Area - Moved up to be main CTA */}
+      <section className="py-20 md:py-24 bg-background">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <EmailVerification
+            state={verificationState}
+            onSendCode={handleSendCode}
+            onVerifyCode={handleVerifyCode}
+            onApply={handleApplyForGift}
+            onStartApplication={handleStartApplication}
+            email={email}
+            setEmail={setEmail}
+          />
+        </div>
+      </section>
+
+      {/* Event Info - Moved below main CTA */}
       <section className="py-12 md:py-16 bg-primary/5">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center space-y-6">
@@ -140,31 +155,16 @@ export default function FarewellEvent() {
                   <div className="text-sm md:text-base">
                     <div><strong>참여 방법:</strong></div>
                     <div className="mt-2 space-y-1 pl-4">
-                      <div>1. 하단의 '선물 신청하기' 버튼 클릭</div>
-                      <div>2. 메일 주소 입력</div>
-                      <div>3. 인증번호 입력</div>
-                      <div>4. 인증 완료되면 '신청하기' 버튼 누르기</div>
+                      <div>1. 상단의 '선물 신청하기' 버튼을 클릭합니다.</div>
+                      <div>2. 메일 주소를 입력하고 인증번호를 요청합니다.</div>
+                      <div>3. 수신된 인증번호를 입력하여 본인 인증을 완료합니다.</div>
+                      <div>4. 모든 정보 입력 및 인증 완료 후 '신청하기' 버튼을 눌러 최종 제출합니다.</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Event Action Area */}
-      <section className="py-20 md:py-24 bg-background">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <EmailVerification
-            state={verificationState}
-            onSendCode={handleSendCode}
-            onVerifyCode={handleVerifyCode}
-            onApply={handleApplyForGift}
-            onStartApplication={handleStartApplication}
-            email={email}
-            setEmail={setEmail}
-          />
         </div>
       </section>
 

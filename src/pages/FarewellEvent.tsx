@@ -96,9 +96,9 @@ export default function FarewellEvent() {
             <TerningLogo className="h-28 md:h-36 lg:h-44" />
           </div>
           <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-              <span className="font-bold text-white">terning</span>
-              <span className="whitespace-nowrap">과의 마지막 여정</span>
+            <div className="flex flex-wrap items-center justify-center gap-x-4">
+              <span className="font-bold text-white">terning 과의</span>
+              <span>마지막 여정</span>
             </div>
           </div>
           <p className="text-2xl md:text-3xl opacity-90">함께해주셔서 고마워요!</p>
@@ -112,13 +112,13 @@ export default function FarewellEvent() {
             <div className="text-center space-y-6">
               <h2 className="text-2xl md:text-3xl font-bold text-primary">감사의 마음을 전합니다</h2>
               <div className="prose prose-lg mx-auto text-muted-foreground">
-                <p className="text-base md:text-lg leading-relaxed break-keep">
+                <p className="text-base md:text-lg leading-relaxed">
                   <span className="hidden md:inline">대학생 여러분들의 꿈과 함께했던 terning의 여정이 마무리됩니다.</span>
                   <span className="md:hidden">대학생 여러분들의 꿈과 함께했던<br />terning의 여정이 마무리됩니다.</span>
                 </p>
-                <p className="text-base md:text-lg leading-relaxed break-keep">
+                <p className="text-base md:text-lg leading-relaxed">
                   <span className="hidden md:inline">비록 서비스는 끝나지만, 여러분이 꿈꿔온 모든 것들이 현실이 될 수 있기를 진심으로 응원하겠습니다.</span>
-                  <span className="md:hidden">비록 서비스는 끝나지만,<br />여러분이 꿈꿔온 모든 것들이 현실이 될 수 있기를<br />진심으로 응원하겠습니다.</span>
+                  <span className="md:hidden">비록 서비스는 끝나지만,<br />여러분이 꿈꿔온 모든 것들이<br />현실이 될 수 있기를<br />진심으로 응원하겠습니다.</span>
                 </p>
               </div>
             </div>

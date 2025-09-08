@@ -1,5 +1,5 @@
 // API 기본 URL을 직접 설정합니다.
-const API_BASE_URL = 'https://www.terning-farewell.p-e.kr';
+const API_BASE_URL = 'https://api.terning-farewell.cloud';
 
 // 공통 API 응답 인터페이스
 interface ApiResponse {

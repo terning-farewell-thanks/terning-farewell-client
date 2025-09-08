@@ -151,28 +151,29 @@ export default function FarewellEvent() {
                 <div className="flex items-start space-x-3">
                   <span className="text-primary font-bold text-lg shrink-0">🎁</span>
                   <div className="text-sm md:text-base leading-relaxed">
-                    <strong>선물 내용:</strong> terning 굿즈와 함께하는 특별한 기념품
+                    <div className="font-bold mb-1">선물 내용:</div>
+                    <div>terning 굿즈와 함께하는 특별한 기념품</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <span className="text-primary font-bold text-lg shrink-0">⚡</span>
-                  <div className="text-sm md:text-base">
+                  <div className="text-sm md:text-base w-full">
                     <div className="font-bold mb-3">참여 방법:</div>
                     <div className="space-y-2 md:space-y-3">
-                      <div className="flex items-start">
-                        <span className="shrink-0 mr-2">1.</span>
+                      <div className="flex">
+                        <span className="shrink-0 mr-3 font-medium">1.</span>
                         <span className="leading-relaxed">상단의 '선물 신청하기' 버튼을 클릭합니다.</span>
                       </div>
-                      <div className="flex items-start">
-                        <span className="shrink-0 mr-2">2.</span>
+                      <div className="flex">
+                        <span className="shrink-0 mr-3 font-medium">2.</span>
                         <span className="leading-relaxed">메일 주소를 입력하고 인증번호를 요청합니다.</span>
                       </div>
-                      <div className="flex items-start">
-                        <span className="shrink-0 mr-2">3.</span>
+                      <div className="flex">
+                        <span className="shrink-0 mr-3 font-medium">3.</span>
                         <span className="leading-relaxed">수신된 인증번호를 입력하여 본인 인증을 완료합니다.</span>
                       </div>
-                      <div className="flex items-start">
-                        <span className="shrink-0 mr-2">4.</span>
+                      <div className="flex">
+                        <span className="shrink-0 mr-3 font-medium">4.</span>
                         <span className="leading-relaxed">모든 정보 입력 및 인증 완료 후 '신청하기' 버튼을 눌러 최종 제출합니다.</span>
                       </div>
                     </div>

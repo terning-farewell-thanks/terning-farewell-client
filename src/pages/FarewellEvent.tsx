@@ -118,7 +118,7 @@ export default function FarewellEvent() {
                 </p>
                 <p className="text-base md:text-lg leading-relaxed">
                   <span className="hidden md:inline">비록 서비스는 끝나지만, 여러분이 꿈꿔온 모든 것들이 현실이 될 수 있기를 진심으로 응원하겠습니다.</span>
-                  <span className="md:hidden">비록 서비스는 끝나지만,<br />여러분이 꿈꿔온 모든 것들이<br />현실이 될 수 있기를<br />진심으로 응원하겠습니다.</span>
+                  <span className="md:hidden"><br />비록 서비스는 끝나지만,<br />여러분이 꿈꿔온 모든 것들이<br />현실이 될 수 있기를<br />진심으로 응원하겠습니다.</span>
                 </p>
               </div>
             </div>
@@ -147,22 +147,34 @@ export default function FarewellEvent() {
           <div className="text-center space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold">선착순 감사 선물 이벤트</h2>
             <div className="bg-white p-6 md:p-8 rounded-xl border border-primary/20 shadow-md">
-              <div className="space-y-4 text-left">
+              <div className="space-y-4 md:space-y-6 text-left">
                 <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold text-lg">🎁</span>
-                  <div className="text-sm md:text-base">
+                  <span className="text-primary font-bold text-lg shrink-0">🎁</span>
+                  <div className="text-sm md:text-base leading-relaxed">
                     <strong>선물 내용:</strong> terning 굿즈와 함께하는 특별한 기념품
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <span className="text-primary font-bold text-lg">⚡</span>
+                  <span className="text-primary font-bold text-lg shrink-0">⚡</span>
                   <div className="text-sm md:text-base">
-                    <div><strong>참여 방법:</strong></div>
-                    <div className="mt-2 space-y-1 pl-4">
-                      <div>1. 상단의 '선물 신청하기' 버튼을 클릭합니다.</div>
-                      <div>2. 메일 주소를 입력하고 인증번호를 요청합니다.</div>
-                      <div>3. 수신된 인증번호를 입력하여 본인 인증을 완료합니다.</div>
-                      <div>4. 모든 정보 입력 및 인증 완료 후 '신청하기' 버튼을 눌러 최종 제출합니다.</div>
+                    <div className="font-bold mb-3">참여 방법:</div>
+                    <div className="space-y-2 md:space-y-3">
+                      <div className="flex items-start">
+                        <span className="shrink-0 mr-2">1.</span>
+                        <span className="leading-relaxed">상단의 '선물 신청하기' 버튼을 클릭합니다.</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="shrink-0 mr-2">2.</span>
+                        <span className="leading-relaxed">메일 주소를 입력하고 인증번호를 요청합니다.</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="shrink-0 mr-2">3.</span>
+                        <span className="leading-relaxed">수신된 인증번호를 입력하여 본인 인증을 완료합니다.</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="shrink-0 mr-2">4.</span>
+                        <span className="leading-relaxed">모든 정보 입력 및 인증 완료 후 '신청하기' 버튼을 눌러 최종 제출합니다.</span>
+                      </div>
                     </div>
                   </div>
                 </div>
